@@ -1,0 +1,3 @@
+config SHIELD_SEAGULL
+    bool "Seagull Shield"
+    default y

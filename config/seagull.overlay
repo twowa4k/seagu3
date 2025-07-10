@@ -1,0 +1,51 @@
+/ {
+    chosen {
+        zephyr,display = &oled;
+        zmk,kscan = &kscan0;
+    };
+
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-direct";
+        label = "KSCAN";
+        input-gpios =
+            <&gpio0 6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>,  /* D0 */
+            <&gpio0 8  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>,  /* D1 */
+            <&gpio1 1  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>,  /* D2 */
+            <&gpio1 2  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>,  /* D3 */
+            <&gpio1 4  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>,  /* D4 */
+            <&gpio1 6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>,  /* D5 */
+            <&gpio1 7  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;  /* D6 */
+    };
+
+    encoder: encoder {
+        compatible = "alps,ec11";
+        a-gpios = <&gpio0 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;  /* A0 */
+        b-gpios = <&gpio0 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;  /* A1 */
+        steps = <24>;
+        status = "okay";
+    };
+
+    leds {
+        compatible = "gpio-leds";
+        layer_led: led_layer {
+            gpios = <&gpio0 16 GPIO_ACTIVE_HIGH>;  // NeoPixel data pin (P0.16)
+            label = "Layer NeoPixel";
+        };
+    };
+
+    battery {
+        compatible = "zmk,battery";
+        io-channels = <&adc 2>;  // A0 = P0.04 = AIN2
+        label = "Battery";
+        status = "okay";
+    };
+
+    zephyr,user {
+        io-channels = <&adc 2>;  // same as battery
+    };
+};
+
+&adc {
+    status = "okay";
+    #io-channel-cells = <1>;
+};
